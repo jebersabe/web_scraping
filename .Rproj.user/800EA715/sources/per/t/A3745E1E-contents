@@ -1,0 +1,121 @@
+---
+title: "Web Scraping"
+author: "Jake Bersabe"
+date: "13/12/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+## Load libraries
+
+```{r}
+library(rvest)
+library(stringr)
+```
+
+
+```{r}
+url <- "https://www.imdb.com/chart/top"
+
+top_movies <- read_html(url)
+```
+
+
+## Extract titles
+```{r}
+titles <- top_movies %>% 
+  html_nodes("tbody tr td.titleColumn") %>% 
+  html_text() %>% 
+  str_trim() %>% 
+  str_split("\n") %>% 
+  lapply(function(movie) {
+  movie[2]
+}) %>% 
+  unlist() %>% 
+  str_squish()
+
+titles
+```
+
+
+## Extract years
+```{r}
+years <- top_movies %>% 
+  html_nodes("tbody tr td.titleColumn") %>% 
+  html_text() %>% 
+  str_trim() %>% 
+  str_split("\n") %>% 
+  lapply(function(movie) {
+  movie[3]
+}) %>% 
+  unlist() %>% 
+  str_squish() %>% 
+  str_sub(2, -2)
+
+years
+```
+
+
+## Extract ratings
+```{r}
+ratings <- top_movies %>% 
+  html_nodes("tbody tr td.ratingColumn strong") %>% 
+  html_text()
+
+```
+
+
+
+## Extracting More Information
+### Extract Links
+```{r}
+links <- top_movies %>% 
+  html_nodes("tbody tr td.titleColumn a") %>% 
+  html_attr("href") %>% 
+  paste0("https://www.imdb.com", .)
+```
+
+### Extract Director
+```{r}
+links[25] %>% 
+  read_html() %>% 
+  html_node("div.ipc-metadata-list-item__content-container") %>% 
+  html_text()
+```
+
+```{r}
+directors <- lapply(links, function(link) {
+  link %>% 
+    read_html() %>% 
+    html_node("div.ipc-metadata-list-item__content-container") %>% 
+    html_text()
+}) %>% 
+  unlist()
+```
+
+
+## Create data frame
+```{r}
+imdb_top_250 <- tibble(rank = 1:250,
+                       title = titles,
+                       year = as.integer(years),
+                       rating = as.double(ratings),
+                       director = directors     
+                       
+                       )
+
+str(imdb_top_250)
+```
+
+
+
+
+
+
+
+
+

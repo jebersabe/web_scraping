@@ -1,0 +1,101 @@
+---
+title: "String Manipulation with *stringr*"
+author: "Jake Bersabe"
+date: "13/12/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(stringr)
+library(dplyr)
+library(tidyr)
+billboard
+```
+
+```{r}
+billboard_longer <- billboard %>% 
+  pivot_longer(cols = starts_with("wk"), 
+               names_to = "week", 
+               values_to = "rank",
+               values_drop_na = T)
+
+billboard_longer %>% head()
+```
+
+```{r}
+x <- c("Jake", "Edison", "Delmiguez", "Bersabe")
+str_length(x)
+
+```
+
+
+```{r}
+str_sub("Delmiguez", 3, -1)
+
+```
+
+
+```{r}
+billboard_longer %>% 
+  mutate(week = str_sub(week, 3, -1),
+         week = as.integer(week))
+  
+unique(billboard_longer$week)
+```
+
+
+```{r}
+str_extract(x, "[:alpha:]*ke")
+```
+
+```{r}
+str_extract(x, "ke")
+```
+
+
+```{r}
+str_extract_all("Hello world, hell yeah!", "[:alpha:]*ll")
+```
+
+```{r}
+str_which(billboard_longer$track, "baby")
+
+billboard_longer$track[str_which(billboard_longer$track, "Life")]
+```
+
+
+
+```{r}
+str_split("Jake Edison D. Bersabe", " ")
+```
+
+```{r}
+str_split("Jake,Edison,D.,Bersabe", ",")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

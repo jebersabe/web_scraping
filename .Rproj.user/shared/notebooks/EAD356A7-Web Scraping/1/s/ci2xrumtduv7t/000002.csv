@@ -1,0 +1,8 @@
+"0","links[25] %>% "
+"0","  read_html() %>% "
+"0","  html_node(""div.ipc-metadata-list-item__content-container"") %>% "
+"0","  html_text()"
+"1","[1]"
+"1"," ""Steven Spielberg"""
+"1","
+"

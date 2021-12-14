@@ -1,0 +1,11 @@
+"0","str_extract_all(""Hello world, hell yeah!"", ""[:alpha:]*ll"")
+"
+"1","[[1]]
+"
+"1","[1]"
+"1"," ""Hell"""
+"1"," ""hell"""
+"1","
+"
+"1","
+"
